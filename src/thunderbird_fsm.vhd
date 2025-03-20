@@ -125,33 +125,33 @@ begin
 	
 	--output logic
 	
-	o_lights_R(0) <= 
-	f_Q(001) or f_Q(010) or f_Q(011) or f_Q(100);
+    o_lights_R(0) <= 
+    '1' when (f_Q = "010" or f_Q = "100" or f_Q = "101" or f_Q = "110") else '0';
+
+	o_lights_R(1) <= 
+	'1' when f_Q = "010" or f_Q = "100" or f_Q = "011" else '0';
 	
-	o_lights_R(1) <=
-	f_Q(001) or f_Q(011) or f_Q(100);
-	
-	o_lights_R(2) <=
-	f_Q(001) or f_Q(100);
+	o_lights_R(2) <= 
+	'1' when f_Q = "010" or f_Q = "011" else '0';
 	
 	o_lights_L(0) <= 
-	f_Q(001) or f_Q(101) or f_Q(110) or f_Q(111);
+	'1' when f_Q = "010" or f_Q = "010" or f_Q = "001" or f_Q = "000" else '0';
 	
 	o_lights_L(1) <= 
-	f_Q(001) or f_Q(110) or f_Q(111);
+	'1' when f_Q = "010" or f_Q = "001" or f_Q = "000" else '0';
 	
-	o_lights_L(2) <=
-	f_Q(001) or f_Q(111);
+	o_lights_L(2) <= 
+	'1' when f_Q = "010"or f_Q = "000" else '0';
 	
     ---------------------------------------------------------------------------------
 	
 	-- PROCESSES --------------------------------------------------------------------
-	-- state memory w/ asynchronous reset ---------------
+	-- state memory w/ synchronous reset ---------------
 	register_proc : process (i_clk, i_reset)
 	begin
 		if (rising_edge (i_clk)) then
             if (i_reset = '1') then
-                f_Q <= x"80";
+                f_Q <= "000";
             else
                 f_Q <= f_Q_next;
             end if;

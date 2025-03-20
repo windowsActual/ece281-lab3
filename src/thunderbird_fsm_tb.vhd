@@ -54,31 +54,68 @@ library ieee;
 entity thunderbird_fsm_tb is
 end thunderbird_fsm_tb;
 
-architecture test_bench of thunderbird_fsm_tb is 
-	
-	component thunderbird_fsm is 
---	  port(
-		
---	  );
+architecture behavior of thunderbird_fsm_tb is 
+    component thunderbird_fsm
+    port( 
+        i_clk, i_reset  : in    std_logic;
+        i_left, i_right : in    std_logic;
+        o_lights_L      : out   std_logic_vector(2 downto 0);
+        o_lights_R      : out   std_logic_vector(2 downto 0)
+    );
 	end component thunderbird_fsm;
 
 	-- test I/O signals
+	-- inputs:
+	signal w_clk : std_logic := '0';
+	signal w_reset: std_logic := '0';
+	signal w_right: std_logic_vector(2 downto 0) := "000";
+	signal w_left: std_logic_vector(2 downto 0) := "000";
+	
+	
+	-- outputs:
+	signal w_leftLight: std_logic_vector(2 downto 0) := "000";
+	signal w_rightLight: std_logic_vector(2 downto 0) := "000";
 	
 	-- constants
+	
+	constant k_clk_period : time := 10ns;
 	
 	
 begin
 	-- PORT MAPS ----------------------------------------
 	
+	uut: thunderbird_fsm port map (
+	
+         i_clk         => w_clk,
+         i_reset       => w_reset,
+         i_left        => w_left(0),
+         i_right       => w_right(0),
+         o_lights_L    => w_leftLight,
+         o_lights_R    => w_rightLight
+	 );
 	-----------------------------------------------------
 	
 	-- PROCESSES ----------------------------------------	
     -- Clock process ------------------------------------
-    
-	-----------------------------------------------------
-	
-	-- Test Plan Process --------------------------------
-	
-	-----------------------------------------------------	
-	
-end test_bench;
+    clk_proc : process
+    begin
+            w_clk <= '0';
+        wait for k_clk_period/2;
+            w_clk <= '1';
+            wait for k_clk_period/2;
+        end process;
+        
+	-- Simulation process
+	-- Use 220 ns for simulation
+	sim_proc: process
+	begin
+		-- sequential timing
+		w_reset <= '1';
+		wait for k_clk_period*1;
+		  assert (w_leftLight = "000" and w_rightLight = "000")
+		      report "Bad reset" severity failure;
+		
+	wait;
+	end process;
+	 
+end;
