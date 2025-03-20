@@ -68,8 +68,8 @@ architecture behavior of thunderbird_fsm_tb is
 	-- inputs:
 	signal w_clk : std_logic := '0';
 	signal w_reset: std_logic := '0';
-	signal w_right: std_logic_vector(2 downto 0) := "000";
-	signal w_left: std_logic_vector(2 downto 0) := "000";
+	signal w_right: std_logic := '0';
+	signal w_left: std_logic := '0';
 	
 	
 	-- outputs:
@@ -88,8 +88,8 @@ begin
 	
          i_clk         => w_clk,
          i_reset       => w_reset,
-         i_left        => w_left(0),
-         i_right       => w_right(0),
+         i_left        => w_left,
+         i_right       => w_right,
          o_lights_L    => w_leftLight,
          o_lights_R    => w_rightLight
 	 );
@@ -109,12 +109,35 @@ begin
 	-- Use 220 ns for simulation
 	sim_proc: process
 	begin
-		-- sequential timing
-		w_reset <= '1';
-		wait for k_clk_period*1;
-		  assert (w_leftLight = "000" and w_rightLight = "000")
-		      report "Bad reset" severity failure;
 		
+		-- sequential timing, check the reset
+		
+		w_left <= '1'; wait for k_clk_period;
+		w_left <= '0'; wait for k_clk_period;
+		w_reset <= '1';wait for k_clk_period*1;
+		
+		assert (w_leftLight = "000" and w_rightLight = "000")
+		report "Bad reset" severity failure;
+		
+		w_reset <= '0';
+		wait for k_clk_period*1;
+		  
+		--check sequencing of left light via visual inspecton
+		w_left <= '1'; wait for k_clk_period*1;
+		w_left <='0';
+
+		wait for k_clk_period*3;
+		  
+		--check sequence of right light via visual inspection
+	    w_right <= '1'; wait for k_clk_period*1;
+	    w_right <= '0';
+	      
+		wait for k_clk_period*3;
+
+	    --switch both to on, check all lights on and then off via visual inspection
+	    w_right <= '1'; w_left <= '1'; 
+	    wait for k_clk_period*1;
+
 	wait;
 	end process;
 	 

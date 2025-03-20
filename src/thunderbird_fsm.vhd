@@ -105,19 +105,19 @@ begin
 	
 	--input logic -- I'm getting paid for doing this... right?
 	
-    f_Q_next(2) <= 
+    f_Q_next(0) <= 
     (not f_Q(2) and not f_Q(1) and not f_Q(0) and i_left and not i_right) or 
     (not f_Q(2) and not f_Q(1) and not f_Q(0) and i_left and i_right)  or 
-    (not f_Q(2) and f_Q(1) and f_Q(0)) or 
-    (f_Q(2) and f_Q(1) and f_Q(0));
+    (not f_Q(2) and f_Q(1) and not f_Q(0)) or 
+    (f_Q(2) and f_Q(1) and not f_Q(0));
     	
 	f_Q_next(1) <=
 	(not f_Q(2) and not f_Q(1) and not f_Q(0) and not i_left and i_right) or
-	(not f_Q(2) and f_Q(1) and f_Q(0)) or 
+	(not f_Q(2) and f_Q(1) and not f_Q(0)) or 
 	(f_Q(2) and not f_Q(1) and f_Q(0)) or 
 	(f_Q(2) and f_Q(1) and not f_Q(0));
 	
-	f_Q_next(0) <= 
+	f_Q_next(2) <= 
 	(not f_Q(2) and not f_Q(1) and not f_Q(0) and i_left and not i_right) or
 	(not f_Q(2) and f_Q(1) and f_Q(0)) or
 	(f_Q(2) and not f_Q(1) and f_Q(0)) or
@@ -126,22 +126,22 @@ begin
 	--output logic
 	
     o_lights_R(0) <= 
-    '1' when (f_Q = "010" or f_Q = "100" or f_Q = "101" or f_Q = "110") else '0';
+    '1' when (f_Q = "001" or f_Q = "010" or f_Q = "011" or f_Q = "100") else '0';
 
 	o_lights_R(1) <= 
-	'1' when f_Q = "010" or f_Q = "100" or f_Q = "011" else '0';
+	'1' when f_Q = "001" or f_Q = "011" or f_Q = "100" else '0';
 	
 	o_lights_R(2) <= 
-	'1' when f_Q = "010" or f_Q = "011" else '0';
+	'1' when f_Q = "001" or f_Q = "100" else '0';
 	
 	o_lights_L(0) <= 
-	'1' when f_Q = "010" or f_Q = "010" or f_Q = "001" or f_Q = "000" else '0';
+	'1' when f_Q = "001" or f_Q = "101" or f_Q = "110" or f_Q = "111" else '0';
 	
 	o_lights_L(1) <= 
-	'1' when f_Q = "010" or f_Q = "001" or f_Q = "000" else '0';
+	'1' when f_Q = "001" or f_Q = "110" or f_Q = "111" else '0';
 	
 	o_lights_L(2) <= 
-	'1' when f_Q = "010"or f_Q = "000" else '0';
+	'1' when f_Q = "001"or f_Q = "111" else '0';
 	
     ---------------------------------------------------------------------------------
 	
