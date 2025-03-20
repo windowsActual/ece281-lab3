@@ -78,7 +78,7 @@ architecture behavior of thunderbird_fsm_tb is
 	
 	-- constants
 	
-	constant k_clk_period : time := 10ns;
+	constant k_clk_period : time := 10 ns;
 	
 	
 begin
