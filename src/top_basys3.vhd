@@ -105,7 +105,7 @@ component clock_divider is
 	);
 end component clock_divider;
 
-	signal w_clk : std_logic;		--this wire provides the connection between o_clk and stoplight clk
+	signal w_clk : std_logic;		--this wire provides the connection between the two components
 	  
 begin
 	-- PORT MAPS ----------------------------------------
@@ -127,9 +127,6 @@ begin
         );
         
 -- Complete the clock_divider portmap below:
-
-
-
 --Complete the clock_divider portmap below based on the design provided	
 	clkdiv_inst : clock_divider 		--instantiation of clock_divider to take 
         generic map ( k_DIV => 25000000) -- 4 Hz clock from 100 MHz -- I Need to verify this value

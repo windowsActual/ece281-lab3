@@ -106,37 +106,43 @@ begin
         end process;
         
 	-- Simulation process
-	-- Use 220 ns for simulation
 	sim_proc: process
 	begin
 		
 		-- sequential timing, check the reset
-		
 		w_left <= '1'; wait for k_clk_period;
 		w_left <= '0'; wait for k_clk_period;
-		w_reset <= '1';wait for k_clk_period*1;
-		
-		assert (w_leftLight = "000" and w_rightLight = "000")
-		report "Bad reset" severity failure;
-		
+		w_reset <= '1';wait for k_clk_period;
+		  assert (w_leftLight = "000" and w_rightLight = "000")
+		  report "Bad reset" severity failure;
 		w_reset <= '0';
 		wait for k_clk_period*1;
-		  
-		--check sequencing of left light via visual inspecton
+		
+		-- check sequence of left light via visual inspecton
 		w_left <= '1'; wait for k_clk_period*1;
+		--sequence will finish cycle despite left switch being cold
 		w_left <='0';
-
 		wait for k_clk_period*3;
 		  
-		--check sequence of right light via visual inspection
+		-- check sequence of right light via visual inspection
 	    w_right <= '1'; wait for k_clk_period*1;
+	    --sequence will finish cycle despite left switch being cold
 	    w_right <= '0';
-	      
 		wait for k_clk_period*3;
 
-	    --switch both to on, check all lights on and then off via visual inspection
+	    -- switches both HOT, check all lights on.
 	    w_right <= '1'; w_left <= '1'; 
 	    wait for k_clk_period*1;
+	       assert(w_leftLight = "111" and w_rightLight = "111")
+	       report "Hazards cold, all input hot" severity failure;
+	    wait for k_clk_period*1;
+	    -- switches both COLD, check all lights off.
+	    w_right <= '0'; w_left <= '0';
+	    wait for k_clk_period*1;
+	       assert(w_leftLight = "000" and w_rightLight = "000")
+	       report "Hazard hot, all input cold" severity failure;
+	    
+	    
 
 	wait;
 	end process;
