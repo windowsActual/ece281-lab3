@@ -127,9 +127,9 @@ begin
         );
         
 -- Complete the clock_divider portmap below:
---Complete the clock_divider portmap below based on the design provided	
+-- Complete the clock_divider portmap below based on the design provided	
 	clkdiv_inst : clock_divider 		--instantiation of clock_divider to take 
-        generic map ( k_DIV => 25000000) -- 4 Hz clock from 100 MHz -- I Need to verify this value
+        generic map ( k_DIV => 12500000) -- 4 Hz clock from 100 MHz -- I Need to verify this value
         port map (						  
             i_clk   => clk,
             i_reset => btnL,
